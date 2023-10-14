@@ -1,4 +1,5 @@
 local QBCore = exports['qb-core']:GetCoreObject()
+local input = {}
 
 RegisterCommand("evidence", function()
     local PlayerData = QBCore.Functions.GetPlayerData()
@@ -12,9 +13,14 @@ RegisterCommand("evidence", function()
     end
 
     if canOpen then
-    local input = lib.inputDialog('Evidence', {
-        {type = 'input', label = 'Evidence Locker', description = 'Choose which locker you wish to open', required = true}
-    })      
+    if GetResourceState('ox_lib') == 'started' then
+        input = lib.inputDialog('Evidence', {
+            {type = 'input', label = 'Evidence Locker', description = 'Choose which locker you wish to open', required = true}
+        })
+    end
+    if GetResourceState('qb-input') == 'started' then
+        input = exports['qb-input']:ShowInput({header = 'Evidence Locker', submitText = 'Submit', inputs = {{type = 'text', text = "Evidence locker", name = 'Evidence', isRequired = true})
+    end       
 
     TriggerServerEvent("inventory:server:OpenInventory", "stash", Lang:t('info.current_evidence_stash', {value = input[1]}), {
         maxweight = 4000000,
